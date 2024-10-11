@@ -51,7 +51,7 @@ Once granted resources on a node, ssh to that node
 ssh ${SLURM_NODELIST}
 ```
 
-Once you ssh to the node where you've been granted resources, you should see the host in the terminal prompt change from the login node (ie. `aanakamo@hb-login`) to a different node (ie. `aanakamo@hbnode-03`). It will also return you to your home directory, so change back into your bootcamp directory.
+Once you ssh to the node where you've been granted resources, you should see the host in the terminal prompt change from the login node (ie. `aanakamo@hb-login`) to a different node (ie. `aanakamo@hbnode-03`). It will also return you to your home directory, so change back into your directory.
 ```
 cd wRi_Riv84
 ```
@@ -64,14 +64,14 @@ Once you are done running things, you can end the interactive job by running `ex
 
 The fastq files from our preliminary nanopore experiments are located in our shared group directory at `/hb/groups/bmebootcamp-2024/Wwil_fastq`. We will use last year's data (from _Wolbachia willistoni_) for the purposes of this tutorial, while waiting for the data from the libraries you all generated for wRi. The fastq files that will be generated from the nanopore library you created for wRi will be here: `/hb/groups/bmebootcamp-2024/${coming_soon}`. 
 
-The fastq file we will be working with in that directory is called `wWil.merged.fastq.gz`. Make sure you're still in your bootcamp directory (the the `~` indicates your home directory, where your bootcamp directory is located). We are going to create a link to the fastq file into your bootcamp folder (the `.` indicates the current directory, which is bootcamp2024):
+The fastq file we will be working with in that directory is called `wWil.merged.fastq.gz`. Make sure you're still in your directory (the the `~` indicates your home directory, where your directory is located). We are going to create a link to the fastq file into your folder (the `.` indicates the current directory, which is wRi_Riv84):
 ```
 cd ~/wRi_Riv84
 # create a soft link to the file using the name of the file
 ln -s /hb/groups/bmebootcamp-2024/Wwil_fastq/wWil.merged.fastq.gz wWil.merged.fastq.gz
 ```
 
-Now `ls` and see that `wWil.merged.fastq.gz` has been linked in your bootcamp directory.
+Now `ls` and see that `wWil.merged.fastq.gz` has been linked in your directory.
 
 ## 2. Running Flye assembler
 
