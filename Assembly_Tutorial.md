@@ -62,13 +62,13 @@ Once you are done running things, you can end the interactive job by running `ex
 
 ## 1. Access the fastq files produced by the Guppy basecaller
 
-The fastq files from our preliminary nanopore experiments are located in our shared group directory at `/hb/groups/bmebootcamp-2024/Wwil_fastq`. We will use last year's data (from _Wolbachia willistoni_) for the purposes of this tutorial, while waiting for the data from the libraries you all generated for wRi. The fastq files that will be generated from the nanopore library you created for wRi will be here: `/hb/groups/bmebootcamp-2024/${coming_soon}`. 
+The fastq files from our preliminary nanopore experiments are located in our shared group directory at `/hb/groups/bmebootcamp-2024/Wwil_fastq`. We will use last year's data (from _Wolbachia willistoni_) for the purposes of this tutorial, while waiting for the data from the libraries you all generated for wRi. The fastq files that will be generated from the nanopore library you created for wRi will be here: `/hb/home/jomojaco/bootcamp2024/wRi_Riv84_filtered.fastq.gz`. 
 
 The fastq file we will be working with in that directory is called `wWil.merged.fastq.gz`. Make sure you're still in your directory (the the `~` indicates your home directory, where your directory is located). We are going to create a link to the fastq file into your folder (the `.` indicates the current directory, which is wRi_Riv84):
 ```
 cd ~/wRi_Riv84
 # create a soft link to the file using the name of the file
-ln -s /hb/groups/bmebootcamp-2024/Wwil_fastq/wWil.merged.fastq.gz wWil.merged.fastq.gz
+ln -s /hb/home/jomojaco/bootcamp2024/wRi_Riv84_filtered.fastq.gz wRi_Riv84_filtered.fastq.gz
 ```
 
 Now `ls` and see that `wWil.merged.fastq.gz` has been linked in your directory.
@@ -86,7 +86,7 @@ The [Flye manual](https://github.com/fenderglass/Flye/blob/flye/docs/USAGE.md) g
 mkdir flye_my_run
 
 # run flye assembler
-time flye --nano-hq wWil.merged.rmdup.fastq.gz -t 1 --out-dir flye_my_run
+time flye --nano-hq wwRi_Riv84_filtered.fastq.gz -t 1 --out-dir flye_my_run
 ```
 Now while this is running you can use ctrl+a+d to exit your screen and reattach with `screen -r wRi_Riv84`
 
