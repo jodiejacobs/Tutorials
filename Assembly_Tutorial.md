@@ -67,7 +67,7 @@ screen -S genome_assembly
 
 ## run flye on the instruction partition 
 salloc --partition=instruction --time=05:00:00 --mem=4G --tasks=1 --cpus-per-task=1 \ #request resources 
- srun time flye --nano-hq wRi_Riv84_filtered.fastq.gz -t 1 --out-dir flye_my_run # run flye assembler 
+ srun time flye --nano-hq wWil.filtered.fastq.gz -t 1 --out-dir flye_my_run # run flye assembler 
 ```
 Now while this is running you can use ctrl+a+d to exit your screen and reattach with `screen -r genome_assembly`
 
