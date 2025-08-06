@@ -17,17 +17,17 @@ ssh <your_cruzid>@hb.ucsc.edu
 You should be in your home directory. You can check the directory you are in by typing `pwd`. This stands for "print working directory" Mine looks like this:
 ```
 [aanakamo@hb ~]$ pwd
-/hb/home/aanakamo
+/hb/home/jomojaco
 ```
 
 Create a new folder in your home directory for this analysis. Its good practice to keep your directories well organized.
 ```
-mkdir wRi_Riv84
+mkdir genome_assembly
 ```
 
 Change into this new directory for the rest of the analysis
 ```
-cd wRi_Riv84
+cd genome_assembly
 ```
 
 > Note: If you are new to linux commands, please refer to the [provided reference slides](https://docs.google.com/presentation/d/1hjIfozfQkjL4gj1eUtvBqgzpWERAkF8Uw43ToAQSxa8/edit#slide=id.p)  
@@ -39,7 +39,7 @@ Before running more computationally intensive commands, you want to reserve spac
 Start an interactive job (that will last for 5 hours) by running:
 ```
 ## create a screen so that we can leave our job running 
-screen -S wRi_Riv84
+screen -S genome_assembly
 
 ## request resources
 salloc --partition=instruction --time=05:00:00 --mem=4G --tasks=1 --cpus-per-task=1
