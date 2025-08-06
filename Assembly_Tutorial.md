@@ -34,13 +34,10 @@ cd genome_assembly
 
 ## 1. Access the fastq files produced by the Guppy basecaller
 
-The fastq files from our preliminary nanopore experiments are located in our shared group directory at `/hb/groups/bmebootcamp-2024/Wwil_fastq`. We will use last year's data (from _Wolbachia willistoni_) for the purposes of this tutorial, while waiting for the data from the libraries you all generated for wRi. The fastq files that will be generated from the nanopore library you created for wRi will be here: `/hb/home/jomojaco/bootcamp2024/wRi_Riv84_filtered.fastq.gz`. 
-
-The fastq file we will be working with in that directory is called `wWil.merged.fastq.gz`. Make sure you're still in your directory (the the `~` indicates your home directory, where your directory is located). We are going to create a link to the fastq file into your folder (the `.` indicates the current directory, which is wRi_Riv84):
+The fastq file we will be working with in that directory is called `wWil.merged.fastq.gz`. Make sure you're still in your directory (the the `~` indicates your home directory, where your directory is located). We are going to create a link to the fastq file into your folder (the `.` indicates the current directory, which is genome_assembly):
 ```
-cd ~/genome_assembly
 # create a soft link to the file using the name of the file
-ln -s /hb/home/jomojaco/bootcamp2024/wRi_Riv84_filtered.fastq.gz wRi_Riv84_filtered.fastq.gz
+ln -s /hb/home/jomojaco/russelllab_tutorial/wWil.filtered.fastq.gz wWil.filtered.fastq.gz
 ```
 
 Now `ls` and see that `wWil.merged.fastq.gz` has been linked in your directory.
