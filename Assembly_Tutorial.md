@@ -16,7 +16,7 @@ ssh <your_cruzid>@hb.ucsc.edu
 
 You should be in your home directory. You can check the directory you are in by typing `pwd`. This stands for "print working directory" Mine looks like this:
 ```
-[aanakamo@hb ~]$ pwd
+[jomojaco@hb ~]$ pwd
 /hb/home/jomojaco
 ```
 
@@ -32,48 +32,21 @@ cd genome_assembly
 
 > Note: If you are new to linux commands, please refer to the [provided reference slides](https://docs.google.com/presentation/d/1hjIfozfQkjL4gj1eUtvBqgzpWERAkF8Uw43ToAQSxa8/edit#slide=id.p)  
 
-## 0.5. Start an interactive slurm job
-
-Before running more computationally intensive commands, you want to reserve space on a node. This is good cluster ettiquite and ensures that we don't back up the hummingbird login node, which could otherwise become slow for other users if everyone runs stuff there. We can do this by submitting a job to slurm, or by starting an interactive job. Here we will start an interactive job, so that you can see what's happening during the assembly process and test things out.
-
-Start an interactive job (that will last for 5 hours) by running:
-```
-## create a screen so that we can leave our job running 
-screen -S genome_assembly
-
-## request resources
-salloc --partition=instruction --time=05:00:00 --mem=4G --tasks=1 --cpus-per-task=1
-```
-If you want, you can see what all the options mean by running `salloc -h`, or visiting [this humminbird tutorial](https://hummingbird.ucsc.edu/documentation/getting-an-interactive-allocation-for-instructional-use/).
-
-Once granted resources on a node, ssh to that node
-```
-ssh ${SLURM_NODELIST}
-```
-
-Once you ssh to the node where you've been granted resources, you should see the host in the terminal prompt change from the login node (ie. `aanakamo@hb-login`) to a different node (ie. `aanakamo@hbnode-03`). It will also return you to your home directory, so change back into your directory.
-```
-cd wRi_Riv84
-```
-
-Please remember to start interactive jobs (or submit a job to slurm) whenever you're downloading files, installing/running tools, etc!
-
-Once you are done running things, you can end the interactive job by running `exit`, which will end the job and return you to the login node. Or, the job will end once it reaches the time limit, but try to remember to exit when you're done. For now though, leave it running as you move onto the next step.
-
 ## 1. Access the fastq files produced by the Guppy basecaller
 
 The fastq files from our preliminary nanopore experiments are located in our shared group directory at `/hb/groups/bmebootcamp-2024/Wwil_fastq`. We will use last year's data (from _Wolbachia willistoni_) for the purposes of this tutorial, while waiting for the data from the libraries you all generated for wRi. The fastq files that will be generated from the nanopore library you created for wRi will be here: `/hb/home/jomojaco/bootcamp2024/wRi_Riv84_filtered.fastq.gz`. 
 
 The fastq file we will be working with in that directory is called `wWil.merged.fastq.gz`. Make sure you're still in your directory (the the `~` indicates your home directory, where your directory is located). We are going to create a link to the fastq file into your folder (the `.` indicates the current directory, which is wRi_Riv84):
 ```
-cd ~/wRi_Riv84
+cd ~/genome_assembly
 # create a soft link to the file using the name of the file
 ln -s /hb/home/jomojaco/bootcamp2024/wRi_Riv84_filtered.fastq.gz wRi_Riv84_filtered.fastq.gz
 ```
 
 Now `ls` and see that `wWil.merged.fastq.gz` has been linked in your directory.
 
-## 2. Running Flye assembler
+## 2. Running Flye assemble
+
 
 Next we will use Flye to perform genome assembly. Load the module:
 ```
@@ -84,11 +57,28 @@ The [Flye manual](https://github.com/fenderglass/Flye/blob/flye/docs/USAGE.md) g
 ```
 # create output directory for flye
 mkdir flye_my_run
-
-# run flye assembler
-time flye --nano-hq wwRi_Riv84_filtered.fastq.gz -t 1 --out-dir flye_my_run
 ```
-Now while this is running you can use ctrl+a+d to exit your screen and reattach with `screen -r wRi_Riv84`
+
+## Start an interactive slurm job
+
+Before running more computationally intensive commands, you want to reserve space on a node. This is good cluster ettiquite and ensures that we don't back up the hummingbird login node, which could otherwise become slow for other users if everyone runs stuff there. We can do this by submitting a job to slurm, or by starting an interactive job. Here we will start an interactive job, so that you can see what's happening during the assembly process and test things out.
+
+Start an interactive job (that will last for 5 hours) by running:
+```
+## create a screen so that we can leave our job running 
+screen -S genome_assembly
+
+## run flye on the instruction partition 
+salloc --partition=instruction --time=05:00:00 --mem=4G --tasks=1 --cpus-per-task=1 \ #request resources 
+ time flye --nano-hq wRi_Riv84_filtered.fastq.gz -t 1 --out-dir flye_my_run # run flye assembler 
+```
+Now while this is running you can use ctrl+a+d to exit your screen and reattach with `screen -r genome_assembly`
+
+If you want, you can see what all the options mean by running `salloc -h`, or visiting [this humminbird tutorial](https://hummingbird.ucsc.edu/documentation/getting-an-interactive-allocation-for-instructional-use/).
+
+Please remember to start interactive jobs (or submit a job to slurm) whenever you're downloading files, installing/running tools, etc!
+
+Once you are done running things, you can end the interactive job by running `exit`, which will end the job and return you to the login node. Or, the job will end once it reaches the time limit, but try to remember to exit when you're done. For now though, leave it running as you move onto the next step.
 
 > Note: Flye took me about 3 hours to run on one thread.
 
@@ -131,7 +121,7 @@ module load quast
 Running Quast:
 ```
 # go back to your bootcamp directory
-cd ~/wRi_Riv84
+cd ~/genome_assembly
 mkdir quast
 
 time quast flye/assembly.fasta --nanopore wWil.merged.rmdup.fastq.gz -t 1 -o quast --circos --k-mer-stats --glimmer --conserved-genes-finding --rna-finding --est-ref-size 1200000
