@@ -103,24 +103,16 @@ module unload flye
 
 We will use the tool [Quast](https://quast.sourceforge.net/docs/manual.html#sec2.1) to assess the quality of our genome assembly.
 
-First, let's start a new interactive job. No need to start a screen this time, since quast finishes relatively quickly.
-```
-salloc --partition=instruction --time=05:00:00 --mem=4G --tasks=1 --cpus-per-task=1
-ssh ${SLURM_NODELIST}
-```
-
-Now load the module:
+Load the module:
 ```
 module load quast
 ```
-
 Running Quast:
 ```
 # go back to your bootcamp directory
 cd ~/genome_assembly
 mkdir quast
-
-time quast flye/assembly.fasta --nanopore wWil.merged.rmdup.fastq.gz -t 1 -o quast --circos --k-mer-stats --glimmer --conserved-genes-finding --rna-finding --est-ref-size 1200000
+salloc --partition=instruction --time=05:00:00 --mem=4G --tasks=1 --cpus-per-task=1 srun quast flye/assembly.fasta --nanopore wWil.merged.rmdup.fastq.gz -t 1 -o quast --circos --k-mer-stats --glimmer --conserved-genes-finding --rna-finding --est-ref-size 1200000
 ```
 > Quast took me about 20 minutes to run on 1 thread.  
 
