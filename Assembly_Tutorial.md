@@ -134,6 +134,9 @@ Running BUSCO:
 mkdir busco
 salloc --partition=instruction --time=30:00:00 --mem=8G --tasks=1 --cpus-per-task=4 busco -i flye_my_run/assembly.fasta -l rickettsiales_odb10 -o busco_rickettsiales -m genome --cpu 4 --out_path busco/
 ```
+> BUSCO typically takes 15-30 minutes to run with the rickettsiales_odb10 database on 4 threads, depending on assembly size and completeness.
+
+The rickettsiales_odb10 database is particularly appropriate for Wolbachia genomes since _Wolbachia_ belongs to the order _Rickettsiales_. This will assess genome completeness based on conserved single-copy orthologs expected in rickettsial genomes.
 
 What do the metrics and plots output by Quast tell us about the quality and completeness of our assembly? Do we have enough information to say whether our assembly is "good"?
 
