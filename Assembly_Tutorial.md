@@ -101,7 +101,7 @@ module unload flye
 
 ## 3. Assembly quality control
 
-We will use the tool [Quast](https://quast.sourceforge.net/docs/manual.html#sec2.1) to assess the quality of our genome assembly.
+We will use the tools [Quast](https://quast.sourceforge.net/docs/manual.html#sec2.1) and [BUSCO](https://busco.ezlab.org/busco_userguide.html) to assess the quality of our genome assembly.
 
 Load the module:
 ```
@@ -109,10 +109,8 @@ module load quast
 ```
 Running Quast:
 ```
-# go back to your bootcamp directory
-cd ~/genome_assembly
 mkdir quast
-salloc --partition=instruction --time=05:00:00 --mem=4G --tasks=1 --cpus-per-task=1 srun quast flye/assembly.fasta --nanopore wWil.merged.rmdup.fastq.gz -t 1 -o quast --circos --k-mer-stats --glimmer --conserved-genes-finding --rna-finding --est-ref-size 1200000
+salloc --partition=instruction --time=05:00:00 --mem=4G --tasks=1 --cpus-per-task=1 srun quast flye_my_run/assembly.fasta --nanopore wWil.filtered.fastq.gz -t 1 -o quast --circos --k-mer-stats --glimmer --conserved-genes-finding --rna-finding --est-ref-size 1200000
 ```
 > Quast took me about 20 minutes to run on 1 thread.  
 
@@ -125,6 +123,16 @@ I would reccommend downloading the quast output to your personal computer, so yo
 
 ```
 scp -r {username}@hb.ucsc.edu:/hb/home/{username}/bootcamp2024/quast/ .
+```
+Load the module:
+```
+module load busco
+```
+Running BUSCO:
+```
+# go back to your directory
+mkdir busco
+salloc --partition=instruction --time=30:00:00 --mem=8G --tasks=1 --cpus-per-task=4 busco -i flye_my_run/assembly.fasta -l rickettsiales_odb10 -o busco_rickettsiales -m genome --cpu 4 --out_path busco/
 ```
 
 What do the metrics and plots output by Quast tell us about the quality and completeness of our assembly? Do we have enough information to say whether our assembly is "good"?
