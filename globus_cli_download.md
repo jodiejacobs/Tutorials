@@ -46,7 +46,7 @@ globus ls <endpoint-id>:/
 
 ### Option B: Set up Globus Connect Personal
 
-If institutional endpoints are non-functional:
+#### For Linux servers:
 
 ```bash
 # Download and extract (one-time setup)
@@ -67,9 +67,7 @@ screen -S globus
 globus endpoint search --filter-scope my-endpoints
 ```
 
-**Save your endpoint ID** - you'll need it as your destination.
-
-### Configure Accessible Paths
+**Configure Accessible Paths (Linux):**
 
 By default, Globus Connect Personal only allows access to your home directory. To access other paths:
 
@@ -94,6 +92,63 @@ Save and restart:
 ./globusconnectpersonal -start
 ```
 
+#### For macOS (local machine or mounted drives):
+
+**Installation:**
+
+```bash
+# Download the macOS version
+cd ~/Downloads
+curl -LO https://downloads.globus.org/globus-connect-personal/mac/stable/globusconnectpersonal-latest.dmg
+
+# Open the DMG file
+open globusconnectpersonal-latest.dmg
+```
+
+Then:
+1. Drag "Globus Connect Personal" to your Applications folder
+2. Open "Globus Connect Personal" from Applications (or use Spotlight: Cmd+Space, type "Globus")
+3. Follow the setup wizard:
+   - Sign in with your institutional account or Globus ID
+   - Complete authentication in your web browser
+   - Return to the app to finish setup
+
+**Configure Accessible Paths (macOS):**
+
+After installation and first launch:
+
+1. Click the **Globus "g" icon** in your menu bar (top right of screen)
+2. Select **"Preferences"** from the dropdown menu
+3. Click the **"Access"** tab
+4. Click the **"+"** (plus) button to add a new folder
+5. Navigate to the folder you want to make accessible:
+   - For home directory: `/Users/your-username/data/`
+   - For external drives: `/Volumes/drive_name/path/`
+   - For mounted NAS: `/Volumes/nas_name/path/`
+   - Example: `/Volumes/sequencing_data/scRNAseq/PIPseq-primary_cells`
+6. Select the folder and click **"Open"**
+7. **Check "Writable"** if you want to transfer files TO this location (not just from it)
+8. Click **"Save"** at the bottom of the Preferences window
+
+**Verify it's running:**
+
+- The Globus "g" icon should appear in your menu bar when running
+- Click it and verify the status shows as connected
+
+**Find your Mac endpoint ID:**
+```bash
+# From terminal with Globus CLI
+mamba activate globus
+globus endpoint search --filter-scope my-endpoints
+```
+
+Your Mac will appear with a name like "your-name's MacBook Pro" and an endpoint ID.
+
+**Important notes:**
+- Globus Connect Personal must be running to transfer files
+- External drives and NAS must be mounted before starting transfers
+- The app will start automatically on login (can be changed in Preferences > General)
+
 ## 3. Transfer Data
 
 ```bash
@@ -103,13 +158,35 @@ globus transfer <source-collection-id>:/<source-path> \
                 --label "Description of transfer"
 ```
 
-**Example:**
+### Transfer to Linux server:
 ```bash
 globus transfer 6fbe3d98-aaa6-482c-9815-a718be94d267:/ \
                 ee0b4b13-9e29-11f0-ae47-0affca67c55f:/private/groups/russelllab/jodie/sequencing_data/scRNAseq/ \
                 --recursive \
                 --label "RNA-seq transfer from Duke"
 ```
+
+### Transfer to local Mac:
+```bash
+globus transfer 6fbe3d98-aaa6-482c-9815-a718be94d267:/ \
+                ecac34b1-9e33-11f0-8dfe-0e1cc5cf4f03:/Users/username/data/ \
+                --recursive \
+                --label "RNA-seq to local Mac"
+```
+
+### Transfer to external drive or mounted NAS:
+```bash
+# Make sure the drive/NAS is mounted first!
+globus transfer 6fbe3d98-aaa6-482c-9815-a718be94d267:/ \
+                ecac34b1-9e33-11f0-8dfe-0e1cc5cf4f03:/Volumes/sequencing_data/scRNAseq/PIPseq-primary_cells/ \
+                --recursive \
+                --label "RNA-seq to NAS"
+```
+
+**Important:** For external drives and NAS, ensure:
+- The drive is mounted before starting transfer
+- You've added the path in Globus Connect Personal (Preferences > Access)
+- Globus Connect Personal is running
 
 The transfer runs server-side and continues even if you disconnect.
 
@@ -137,12 +214,21 @@ You'll receive an email when the transfer completes.
 # Check files arrived
 ls -lh /path/to/destination/
 
-# Verify checksums (if .md5 file provided)
+# Verify checksums using provided .md5 file
 cd /path/to/destination/
-md5sum *.fastq.gz > computed.md5
+md5sum -c Jacobs_11177_250926A9.md5
+```
 
-# Compare with provided checksums
-diff computed.md5 provided.md5
+This will show "OK" for each file if checksums match:
+```
+Dsim-Merrill23-1_S67_L003_R1_001.fastq.gz: OK
+Dsim-Merrill23-1_S67_L003_R2_001.fastq.gz: OK
+...
+```
+
+If you need to generate checksums (no provided .md5 file):
+```bash
+md5sum *.fastq.gz > computed.md5
 ```
 
 ## Troubleshooting
