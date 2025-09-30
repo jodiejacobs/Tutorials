@@ -172,6 +172,7 @@ globus transfer 6fbe3d98-aaa6-482c-9815-a718be94d267:/ \
                 ecac34b1-9e33-11f0-8dfe-0e1cc5cf4f03:/Users/username/data/ \
                 --recursive \
                 --label "RNA-seq to local Mac"
+# Hint: use 'caffeinate' command in another terminal tab to prevent computer from timing out
 ```
 
 ### Transfer to external drive or mounted NAS:
